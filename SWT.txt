@@ -1,0 +1,470 @@
+ 								NHẬP MÔN KIỂM THỬ PHẦN MỀM -SOFTWARE TESTING
+										(ISTQB)
+
+1.Các khái niệm dễ gây nhầm lẫn, có sự liên quan: bug, mistake, defect, error, failure - có trong Cheat Sheet
+
+2. ĐỊNH NGHĨA: KIỂM THỬ LÀ GÌ ?
+- So sánh giữa giá trị kì vọng/mong đợi (expected value) và giá trị thực tế (actual value)
+- So sánh xem app nhận thông tin, và xử lí thông tin, và trả về kết quả (actual) có đúng như mong đợi (expected)
+	=> nếu actual == expected -> OK
+	=> nếu actual != expected -> BUG
+VD1: kiểm thử hàm tính giai thừa getFactorial(int n) chạy tại ra các tình huống xài hàm, dùng hàm, xem hàm có trả về kq có ok không
+	- tình huống 1: n = 5; getFactorial(5) trả về 120 - expected
+	- tình huống 2: n = 6; getFactorial(6) trả về 720 - expected
+	- tình huống 3: n = 0; getFactorial(0) trả về   1 - expected
+Code xong ->run test với các n đã liệt kê ở trên, xem hàm return actual có == expected hay không ? -> kết luận đúng sai
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+VD2: Viết code cho tính năng in bill thanh toán ở cửa hàng. 
+	Cửa hàng có khuyến mãi theo 1 đợt sự kiện nào đó
+	Ví dụ hệ thống đang test cho sự kiện khuyến mãi 10% tổng giá trị đơn hàng nếu đơn mua >=1M; KM không quá 200k; giảm 10% không quá 200k
+Để test chức năng này, ta phải giả lập các tình huống mua hàng ở ngoài đời, tức là giả lập các giá trị bill khác nhau
+	- th1: mua 900k, bill in ra cần thanh toán:900k
+	- th2: mua 1M, bill in ra cần thanh toán: 900k (giảm 100k)	 |
+	- th3: mua 2M, bill in ra cần thanh toán : 1M8	(giảm 200k)	 |-->EXPECTED VALUE
+	- th4: mua 3M, bill in ra cần thanh toán : 2M7	(giảm 300k)	 |
+
+	THỰC TẾ APP CHẠY RA BILL BAO NHIÊU? CHỜ APP VIẾT XONG, ĐƯA DATA VÀO, ẤN NÚT CHỜ KQ 
+	NẾU ACTUAL == EXPECTED: NGON
+	NẾU ACTUAL != EXPECTED: CÚT
+
+[CÂU HỎI] Trong thực tế, khi test app, hoặc 2 trường hợp trên, ta cần bao nhiêu tình huống là đủ để khẳng định hàm chạy đúng
+- bao nhiêu th kiểm thử là đủ để kết luận
+
+[THUẬT NGỮ]
+- NHỮNG DATA ĐƯA VÀO APP ĐỂ CHẠY THỬ TÍNH NĂNG,  KÈM VỚI KQ TRẢ VỀ,  XÀI APP MÀ CÓ BỘ DATA ĐI KÈM ĐƯA VÀO GỌI LÀ TEST CASE
+- TEST CASE LÀ BỘ DATA ĐƯA VÀO APP ĐỂ MÔ PHỎN LẠI HÀNH ĐỘNG CỦA NGƯỜI DÙNG KHI XÀI APP, SAU KHI XÀI APP SẼ CÓ KQ TRẢ VỀ (ACTUAL VALUE)
+ĐEM ĐI SO SÁNH VỚI EXPECTED VALUE ĐÃ CÓ TRƯỚC
+- BAO NHIÊU TEST CASE LÀ ĐỦ
+
+* MÔN HỌC SWT301, SWP490(KHOÁ LUẬN TỐT NGHIỆP) ĐỀU YÊU CẦU PHẢI THIẾT KẾ, LIỆT RA DANH SÁCH CÁC TEST CASE CẦN CÓ ĐỂ KIỂM TRA 1 APP/HÀM CHẠY OK KHÔNG
+	SWT301 THI PE LÀ LIỆT KÊ TEST CASE
+	SWP490 FILE EXCEL TRÊN GITHUB LÀ CÁC TEST CASE TEST APP RA TRƯỜNG
+
+*ĐỊNH NGHĨA 2: Kiểm thử phần mềm còn là so sánh, đo lường hiệu năng hoạt động, trải nghiệm người dùng khi dùng app(HIỆU NĂNG: PERFORMANCE)
+	       Ta sẽ còn đo lường app chạy nhanh hay chậm, an toàn bảo mật ra sao, dễ hay khó dùng, tương thích hay không, nghẽn/đơ luôn hay không
+=> CÒN DC GỌI LÀ KIỂM THỬ PHI CHỨC NĂNG(NON-FUNCTIONAL REQUIREMENT) CÓ THOẢ MÃN KO
+
+VÍ DỤ:  - kiểm xem app có phản hồi đủ nhanh hay ko, mọi xử lí của app phải trả về kết quả <=3s
+	- kiểm xem app có chịu được khoảng 5k người dùng cùng lúc vào săn sale, ở 30p đầu của đợt khuyến mãi
+
+TOOL GIẢ LẬP SỐ LƯỢNG REQUEST: JMETER: giả lập request, đo respond time, thống kê timeout, vẽ chart
+	- đo dễ dùng: bằng số giờ huấn luyện user, sau 30p HDSD user xài ok không sai sót nhiều 
+
+*ĐỊNH NGHĨA 3: KIỂM THỬ PHẦN MỀM CÒN BAO GỒM CÔNG VIỆC SO SÁNH, ĐỐI CHIẾU, KIỂM TRA, THẨM ĐỊNH, ĐÁNH GIÁ XEM VIỆC LÀM APP/CODE CÓ TUÂN THỦ 
+ĐÚNG HỢP ĐỒNG ĐÃ KÍ VỚI KHÁCH HÀNG HAY KO, KIỂM TRA XEM VIỆC DEV TEAM CODE CÁC MÀN HÌNH KHI LÀM APP, THEO TRUYỀN THỐNG CÓ 2 DOCUMENT LỚN:
+	* SRS: Software Requirements Specification
+		-liệt kê các chức năng, các yêu cầu về tính năng mà app phải cung cấp. Bao gồm: user roles, functional requirement, non-functional requirement, ERD
+	* SDD: Software Design Document
+		- mô tả kiến trúc phần mềm (cách bố trí code): MVC2, API,...
+		- mô tả class, diagram, physical database diagram, algorithm
+	2 DOC NÀY, TESTER PHẢI ĐỌC, SAU ĐÓ SO SÁNH, ĐỐI CHIẾU VỚI APP VỪA LÀM ĐỂ BIẾT CÁC DEV CÓ CODE THEO DOCS MÔ TẢ HAY KHÔNG
+	2 DOC NÀY GOM LẠI THÀNH CUỐN CAPSTONE PROJECT REPORT CỦA SWP490
+	2 DOC NÀY GOM LẠI, VIẾT 1 SỐ NỘI DUNG, LÀ DOC CỦA MÔN SWP391
+========================================================================================================================================================================
+3.QA/QC									
+website tuyển dụng hay ghi: tuyển QA/QC
+2 vị trí, 2 con người, 2 job title
+Cả 2 vị trí đều hướng đến phần mềm tốt, có chất lượng; nhưng công việc hàng ngày thì khác nhau tẹo
+
+          QA                                                            	QC
+    Quality Assurance							Quality Control/Tester
+    Đảm bảo chất lượng				  			Kiểm thử phần mềm
+ 
+- PHÒNG NGỪA BUG, KO MUỐN BUG XẢY RA					- ĐI TÌM BUG
+- LÀM VIỆC VỚI QUY TRÌNH						- LÀM VIỆC VỚI APP, DÙNG THỬ CÁI APP, THIẾT KẾ TEST CASE
+  ĐỊNH NGHĨA QUY TRÌNH						
+  KIỂM SOÁT SỰ TUÂN THỦ QUY TRÌNH					
+
+VÍ DỤ: 									REPORT VỚI PM LÀ TỐI ĐA
+-QA cùng PM, Scrum Master run dự án theo Scrum,				
+và những thứ sau cần dev team tuân thủ:
+	- Các reqs lưu ở 1 nơi, gọi là backlog
+	- tiến trình làm dự án dc chia thành
+	các khoảng thời gian đều nhau - SPRINT(2W)
+	phải hoàn tất 1 lượng chức năng
+	- Có thể lên kế hoạch release sản phẩm 
+	theo User Story Mapping
+	- Định kì hàng ngày dev team phải họp
+	nhanh, 15p, mỗi người nói 3 câu:
+	- Cuối mỗi SPRINT thì có buổi demo/review
+	sp với khách hàng để ghi nhận feedback
+	để cải tiến trong lần kế
+	- demo xong, có 1 phiên họp khác trong cùng 
+	ngày để chia sẻ cảm xúc, kinh nghiệm đã gặp,
+	gọi là: RETROSPECTIVE
+	- mọi cuộc họp đều có biên bản/bằng chứng
+
+KIỂM TRA THANH TRA NHIỀU DỰ ÁN, REPORT VỚI SẾP TRÊN
+
+-TOOL, ĐỒ CHƠI, CÔNG CỤ CHO MỖI BÊN:					- TOOL:
++ CMMI, ISO, [5S, 6 SIGMA]						 + CHẠY = CƠM, NUnit, JUnit, TestNG, xUnit, Mocha, Jest,
+									 Selenium, Appium, Katalon, Test Complete, JMeter...						
+- 1 số nơi đào tạo:
+PACE (chứng chỉ)
+FSB (FPT)
+VGU (Việt Đức)
+CFVG (Việt Pháp)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+4. NHỮNG AI SẼ THAM GIA VÀO QUY TRÌNH KIỂM THỬ PHẦN MỀM
+ những ai sẽ đảm nhận trực tiếp chất lượng của phần mềm
+
+	4.1 DEVELOPER
+	- cviệc chính là viết code, viết hàm/method/class, BE, FE
+	- developer còn chịu trách nhiệm đảm bảo code ít bug nhất có thể
+	  hoặc đảm bảo các hàm /method chạy tốt nhất
+	  hoặc đảm bảo các class(method bên trong) được viết với chất lượng cao nhất, tức là CÁC HÀM, CLASS PHẢI LUÔN ĐƯỢC TEST ĐỂ ĐẢM BẢO CHẠY ĐÚNG
+	- developer viết code và phải test code của mình!
+	- LÀM SAO ĐỂ TEST CODE DO MÌNH VIẾT RA, có những kĩ thuật sau:
+		+ In kquả gọi hàm ra màn hình, console, qua các lệnh
+		System.out.println(obj.method());
+		Console.WriteLine(obj.method());
+	- In kquả gọi hàm ra LOG FILE, FILE TEXT GHI OUTPUT của hàm
+	=> Làm cách này nếu ta cần test nhiều hàm, nhiều method và nhiều test case(data đưa vào khác nhau) thì mắt nhìn sẽ rất mệt, vì có rất nhiều
+	output và phải so sánh giữa các cặp expected == actual
+	- DÙNG THÊM 1 BỘ THƯ VIỆN ĐẶC BIỆT, CÒN GỌI LÀ UNIT TEST FRAMEWORK
+	sẽ cũng giúp chúng ta test các hàm có trả về kquả như mong đợi không, NHƯNG NÓ CÒN GIÚP CHÚNG TA BƯỚC VÀO 1 QUY TRÌNH KIỂM SOÁT CHẤT LƯỢNG
+	NỔI TIẾNG LÀ CI - CONTINUOUS INTEGRATION - TÍCH HỢP LIÊN TỤC
+	CI ĐI KÈM CD/DEVOPS
+	Bộ thư viện này mang tên: JUnit, TestNG, xUnit, MS Test, Mocha, Jest, PyTest,... CHƠI VỚI 2 MÀU XANH ĐỎ: XANH: EXPECTED == ACTUAL
+														 ĐỎ: EXPECTED != ACTUAL
+					keyword: unit test framework for <NNLT>
+	- VIỆC XÀI TOOL, HOẶC LÀ SYSTEM.OUT. CONSOLE. ĐỂ IN RA KQUẢ XỬ LÍ CỦA HÀM/CLASS ĐƯỢC GỌI LÀ UNIT TESTING!!!
+												   KIỂM THỬ ĐƠN VỊ
+												   KIỂM THỬ TỪNG HÀM/ LÀ ĐƠN VỊ CODE NHỎ NHẤT TRONG 1 APP
+[CÂU HỎI PHỎNG VẤN]
+- EM HÃY CHO BIẾT VỀ 2 KHÁI NIỆM: FRAMEWORK VÀ LIBRARY
+
+
+------------------------------------------
+	4.2 QC/TESTER
+	- NHÂN VẬT CHÍNH TRONG CÂU CHUYỆN ĐẢM BẢO CHẤT LƯỢNG PHẦN MỀM
+	- NHÂN VẬT CHÍNH LQUAN TỚI BUG
+Những cviệc chính của QC/Tester là:
+
+* Thiết kế, develop, tạo ra các TEST CASE
+TEST CASE là 1 tình huống kiểm thử app, là sự giả lập 1 cách xài app của user sau này, tức là QC phải mô phỏng hành vi xài của người dùng khi app được 
+đem ra thi trường, mô phỏng = cách đưa data vào app, nhấn nút chờ app xử lí và kì vọng app phải trả về giá trị gì đó, sau đó so sánh expected == actual ???
+Nếu app bị ghẻ, bug trong tình huống X nào đó, QC sẽ báo cho dev sửa, để sau này nếu app đưa ra thị trường, tình huống X đã chặn hết, ko còn bug cho user
+=>Qc xài app trước thiên hạ để tìm bất thường cho Dev fix trước khi tới tay user
+
+TEST CASE LÀ 1 TÌNH HUỐNG KIỂM THỬ APP ĐỂ MÔ TẢ LẠI HÀNH VI XÀI CỦA USER. TEST CASE CHỨA BÊN TRONG DATA ĐỂ APP PHẢI XỬ LÍ, CHỨA LUÔN CẢ EXPECTED VALUE
+
+TEST CASE THƯỜNG ĐỂ TRONG EXCEL, HOẶC 1 TOOL ONLINE, VD: TEST RAIL
+
+
+* RUN CÁC TEST CASE, EXECUTE CÁC TEST CASE, THỰC THI CÁC TEST CASE
+		      TEST CASE EXECUTION
+Mở app lên(KO PHẢI MỞ SOURCE) vào trang tính năng/page cần test, nhập data theo mô tả trong test case, nhấn nút, chờ app ra kquả có giống như kì vọng 
+không ? RUN CÁC TEST CASE ĐỂ BIẾT PAGE/TÍNH NĂNG CHẠY ĐÚNG HAY SAI!!!!
+
+
+*LOG BUG: ĐƯA BUG TÌM THẤY LÊN DATABASE CHUNG, CHỨA TOÀN BỘ BUG CỦA DỰ ÁN DO TẤT CẢ CÁC TESTER/QC TÌM THẤY 
+	  bug database nó chứa cái mô tả/ảnh chụp về bug xảy ra, làm sao  để tạo lại cái bug đã xảy ra, để dev đọc biết đường debug và fix
+	  BUG DATABASE ĐÃ ĐƯỢC QC INSERT VÀO, DÂN DEV SELECT, UPDATE STATUS ĐÃ FIX HAY CHƯA 
+	TOOL DÙNG LÀM BUG DATABASE: BUGZILLA, JIRA
+
+
+* VIẾT/DEVELOP CÁC TEST SCRIPT
+
+
+- Công việc của QC/Tester là:
+	viết ra các test case(bộ data để test 1 chức năng nào đó của app - theo cách giả lập tình huống user ngoài đời sẽ dùng app)
+sau đó mở app lên, đưa data vào app, nhấn nút, chờ xử lí xong lấy kquả trả về của app để đem đi so sánh với giá trị kì vọng để kết luận đúng sai 
+và log bug lên bug DB
+Có 2 cách để QC/Tester làm cviệc ở trên, có 2 cách để tiến hành TEST RUN, RUN CÁI TEST ĐỂ TÌM RA BUG
+
+C1: TRÂU BÒ, DÙNG SỨC NGƯỜI ĐỂ CHẠY TEST CASE
+	- Mở app, login, gõ vào, click button, nhập data vào page muốn test, nhấn nút xử lí, chờ app trả về kquả xử lí =>BẰNG TAY
+	dùng để đọc kquả xử lí , tự so sánh bằng trí não với giá trị expected
+	=>HOÀN TOÀN DÙNG SỨC NGƯỜI ĐỂ RUN 1 TEST CASE, KQUẢ ĐÚNG SAI TUỲ VÀO TÍNH NĂNG, CỦA TEST CASE CŨNG DÙNG SỨC SUY NGHĨ VÀ MẮT ĐỂ SO SÁNH
+	=>DÙNG SỨC NGƯỜI TEST GỌI LÀ MANUAL TESTING
+	QC muốn ứng tuyển vào MANUAL TESTING cần:
+		+cẩn thận/kiểu thánh soi
+		+ngoại ngữ (để đọc hiểu document, đọc dc ý nghĩa màn hình)
+		+tin học văn phòng cơ bản
+CÁCH NÀY RẺ + DỄ LÀM
+NHƯNG KHI TEST LẠI NHỮNG THỨ TỪNG TEST DO CODE DC UPDATE, THÌ CÁCH NÀY TỐN TGIAN, NHÀM CHÁN
+
+C2: DÙNG MÁY, DÙNG CODE ĐỂ CHẠY TEST CASE 
+	Dân QC phải biết lập trình, lập trình OOP: C#, Java,...
+	và viết những đoạn code ( độc lập việc làm app của dev)để tự động mở ap, tự động điền user/pass cho trước, tự nhấn login, tự chọn menu mong muốn,
+	tự mở page cần test, tự đưa data/nhập data chuẩn bị sẵn từ test case, tự select radio button, tự nhấn nút xử lí , tự capture màn hình trả về của app, 
+	tự so sánh với expected value và BÁO LÊN 2 MÀU XANH ĐỎ: XANH: PASS, ĐỎ: FAILED
+
+	-APP DC ĐIỀU KHIỂN BỞI DÒNG CODE MÀ DÂN QC TỰ VIẾT KĨ THUẬT MÀ ĐIỀU KHIỂN APP TỰ ĐỘNG ĐỂ THỰC THI CÁC TEST CASE CHO TRƯỚC ĐỂ TÌM BUG, CHỨNG MINH APP NGON,
+	KĨ THUẬT NÀY ĐƯỢC GỌI LÀ : TEST AUTOMATION, AUTOMATED TESTING
+
+	LÀM SAO:
+	-DÙNG CÁC TVIỆN BÊN NGOÀI + NNLT -> SAI KHIẾN APP DC RỒI CÁC TVIỆN VÀ TOOL HUYỀN THOẠI ĐỂ LÀM TEST AUTOMATION:
+	- Selenium, Cypress(tự động điểu khiển web app)
+	-Appium (mobile/desktop)
+	
+	KĨ THUẬT NGẦU HƠN LÀ, XÀI CÁC APP:
+	-KATALON, TEST COMPLETE, RANOREX, TELERIK, AKA TEST(FPT)
+	-nó cung cấp 1 cơ chế: record các thao tác MANUAL, SAU ĐSO NÓ GHI LẠI HẾT CÁC HÀNH ĐỘNG CỦA QC, GHI THÀNH 1 KỊCH BẢN (K PHẢI MP4)
+	SAU ĐÓ QC CÓ THỂ REPLAY LẠI KỊCH BẢN NÀY CÓ THỂ GENERATE RA CODE DƯỚI DẠNG DÙNG SELENIUM ĐỂ TA TINH CHỈNH KỊCH BẢN TỰ ĐỘNG HÓA
+
+NHỮNG ĐOẠN CODE DO DÂN QC VIẾT RA ĐỂ KHIẾN APP CHẠY NHƯ MA NHẬP, THÌ ĐC GỌI LÀ TEST SCRIPT
+
+
+--------------------------------------
+	4.3 QC LEADER/MANAGER
+	- Gã này thường dc cất nhắc, thăng tiến, đi lên từ chính QC/Tester 
+	- Gã này sẽ làm việc với PM (và cả dev team) để biết dc tiến độ của dự án, để hoạch định, lên kế hoạch kiểm thử app cho phù hợp,
+	tức là lên kê hoạch khi nào bắt đầu kiểm thử, có khi QC tham gia vào ngay từ lúc làm Requirement
+	- Gã này còn lên kế hoạch về nguồn lực, tài nguyên cần cho việc kiểm thử ap, ví dụ: ta cần 1 server để host cái web app sẵn sàng 
+	cho việc test, ta cần mua máy đọc barcode, màn hình touch, máy in để test tính năng tạo bill bán hàng, mua con đthoại để test mobile
+	- Gã này là làm việc với chủ yếu là excel, email, word, PPT, ... để lên kế hoạch, đọc các report...
+	- Quản lí về tiến độ kiểm thử phần mềm, phối hợp cùng PM để xác định thời điểm sẵn sàng release sản phẩm = GO LIVE, GO PRODUCTION
+	- SERVER CHỨA ĐỒ CHƠI, CHỨA APP CẦN TEST GỌI LÀ : STAGING ENVIRONMENT/STAGING SERVER, MÔI TRƯỜNG THỬ NGHIỆM, MÔI TRƯỜNG TEST APP
+
+
+--------------------------------------- 
+	4.4 END-USER
+	- GÃ ĐÓNG VAI TRÒ QUAN TRỌNG CUỐI CÙNG TRONG CÔNG VIỆC KIỂM THỬ APP, GÃ SẼ FEEDBACK HOẶC CONFIRM APP NGON
+	- Gã này mở app lên xài , kiểm tra xem có làm dc các cviệc mình cần
+
+	CÓ 2 LOẠI APP NẾU TA XÉT THEO CÁCH PHÂN LOẠI DỰA TRÊN USER XÀI APP, TÍNH PHỔ BIẾN CỦA APP
+	(VÍ DỤ PHÂN LOẠI APP THEO PLATFORM : MOBILE , DESTOP, DESTOP)
+
+* GENERIC APP, PRODUCT: Là những app hướng đến số đông người dùng, cành nhiều user dùng càng tốt, ko hạn chế việc tiếp cận app,
+app quốc dân, app viết cho nhiều user xài.
+VD: game, tool, drive, media, các trình duyệt, các hệ điều hành, MXH, ...
+- Những app generic thường SẼ CÓ LINK DOWNLOAD, REGISTER MEMBER ĐỂ DÙNG
+- Những phần mềm dạng GENERIC thường có nhiều version cho user download dùng thử:
+										 alpha
+										 beta
+										 trial
+										 community
+										 pro
+										 enterprise
+										 preview
+										 RC (Release Candidate)
+										 nightly build
+										 build x.x.x.x
+										 stable
+										 LTS (long-term support)
+
+TẠI SAO PHẦN MỀM QUỐC DÂN LẠI CUNG CẤP NHIỀU PHIÊN BẢN, NGAY CẢ KHI CÒN BUG VẪN RELEASE: ĐỂ XÂY DỰNG CỘNG ĐỒNG USER ĐÔNG ĐẢO XÀI APP,
+CÀNG NHIỀU NGƯỜI DÙNG, CÀNG NHIỀU BUG CÓ THỂ XẢY RA
+CÀNG NHIỀU FEEDBACK ĐƯỢC GỬI VỀ
+
+*CUSTOM APPS, BESPOKED APP : Hàng độ, hàng thửa riêng, làm riêng, app được viết theo đơn đặt của user, tổ chức phù hợp với chu cầu riêng biệt
+của bên dặt hàng, việc user tiếp cận nó kh rộng rãi như app product, generic app
+VD: app eBanking của TP Bank khác app eBanking của ACB, khác của Agribank
+    app ATM của TPBank khác app ATM của ACB.......
+- Những app này thường dùng riêng cho doanh nghiệp, thường SẼ KHÔNG CÓ LINK DOWNLOAD
+- Làm theo đơn đặt hàng của các doanh nghiệp, quán ăn, khách sạn, nhà hàng, trường học, bệnh viện, ... CHO NÊN APP SẼ ĐƯỢC NVIÊN HOẶC 
+KHÁCH HÀNG CỦA HỌ XÀI
+- Nhân viên sẽ xài app trong cviệc của họ, hỗ trợ cviệc của họ
+VD: bạn thu ngân 711 xài app tính tiền trong việc mua hàng của khách
+    bạn nhân viên tín dụng xài app quản lí ngân hàng để lo việc vay tiền, trả tiền
+    bác sĩ xài app QLBV để ra đơn thuốc
+NHÂN VIÊN XÀI APP, CHO FEEDBACK, GÓP Ý, ĐÁNH GIÁ, REPORT BUG, MÀN HÌNH KO HỢP LÍ,... ĐỂ PM FIX.
+NHÂN VIÊN SẼ LÀ GÃ "NGHIỆM THU" SẢN PHẨM/CONFIRM APP DÙNG NGON TRONG CVIỆC CỦA HỌ
+
+=====================================================================================================================================================
+5. 7 VIÊN NGỌC RỒNG - 7 NGUYÊN LÍ KIỂM THỬ PHẦN MỀM
+		      7 PRINCIPLES OF SOFTWARE TESTING
+Đây là những quy tắc, định hướng, những nguyên lí, chỉ dẫn, kim chỉ nam để định hướng, hướng dẫn QC biết cách làm các cviệc kiểm thử
+1 cách có hệ thống và để giúp cho team có pmềm chất lượng
+- Định hướng các hđộng của dân QC
+
++ OOP (AEIP + SOLID)
++ Manifesto for Agile Software Development (https://agilemanifesto.org)
++ DB: 3(NF) 3 dạng chuẩn
++ SWR: 3 câu hỏi - WHY, WHAT, WHO
++ SWT: 7 viên ngọc rồng
+
+*NL1: TESTING SHOWS THE PRESENCE OF DEFECT
+- Kiểm thử phần mềm là đi tìm bug, đi tìm bug còn đang tiềm ẩn, có sẵn trong app
+- Kiểm thử phần mềm là đi tìm bug, cố gắng tìm ra càng nhiều bug càng tốt
+- Kiểm thử phần mềm ko phải là: CHỨNG MINH RẰNG APP TUI ĐÃ HẾT BUG, APP TUI KH CÒN BUG. SAI!!!!
+				KIỂM THỬ PHẦN MỀM KO PHẢI LÀ CHỨNG MINH APP HẾT BUG, KO CÒN BUG
+				chính xác là đi tìm bug, vì app luôn còn bug
+
+- KO BAO GIỜ CÓ THỂ TÌM HẾT BUG CỦA APP
+- NHƯNG KO VÌ CÁI CHÂN LÍ NÀY MÀ TA LÀM ẨU, LÀM APP KÉM CHẤT LƯỢNG VÌ
+KHÁCH HÀNG SẼ QUAY LƯNG VỚI APP, VỚI CTY CỦA CHÚNG TA
+- TEST LÀ CỐ GẮNG TÌM THẤY, NGĂN NHỮNG BUG NGUY HIỂM, NGHIÊM TRỌNG CÒN TỒN TẠI
+
+LÍ DO TẠI SAO APP VẪN CÒN BUG DÙ DC TEST KĨ
+APP LÀ SỰ KẾT HỢP CỦA CÁC THÀNH PHẦN KHÁC BIỆT
+- Rất nhiều dòng code chạy trên các OS khác nhau, trên cùng OS nhưng khác phiên bản
+- Kết hợp của cấu hình phần cứng khác nhau, device khác nhau, sensor khác nhau, nhà mạng khác nhau
+- Kết hợp với vô số cách xài , cách nhập liệu khác nhau của user
+
+DO ĐÓ SỐ TỔ HỢP TÌNH HUỐNG CẤU HÌNH MÁY KẾT HỢP VỚI APP, SỐ TỔ HỢP CÁCH XÀI, TÌNH HUỐNG XÀI APP
+CỦA ĐA DẠNG USER LÀ VÔ SỐ KỂ
+RÕ RÀNG QC KO DỄ ĐỂ MÔ PHỎNG HẾT CÁC TÌNH HUỐNG CASE CỦA APP
+KO TEST HẾT DC CÁC CASE, KO LIỆT KÊ ĐỦ TEST CASE, KO ĐỦ TGIAN ĐỂ TEST HẾT CÁC CASE
+=> CÒN BUG LÀ ĐIỀU HIỂN NHIÊN
+=> KIẾM THỬ LÀ CỐ GẮNG NGĂN NGỪA BUG, TÌM THẤY CÀNG NHIỀU BUG CÀNG TỐT
+
+*NL2:EXHAUSTIVE TESTING IS NOT POSSIBLE
+	vắt kiệt
+	ép xung
+	...
+
+KO THỂ MÔ PHỎNG HẾT, VÀ ĐỦ SỨC, HAY TGIAN ĐỂ TEST HẾT TẤT CẢ CÁC TÌNH HUỐNG XÀI APP
+KO THỂ LIỆT KÊ HẾT CÁC TEST CASE,  NẾU CÓ CŨNG KO ĐỦ TGIAN ĐỂ RUN HẾT CÁC TEST CASE
+
+VD: ta có hàm getFactorial(int n) hàm tính giai thừa chỉ dành cho số dương - ta cần test hàm này để đảm bảo
+nó chạy đúng, về logic cần phải test hết các trường hợp để khẳng định hàm ok
+- thực tế: n kiểu int tức là có 4 tỷ 2 số n (n=-2 tỷ 1 -> +2 tỷ 1)
+ta sẽ có 4 tỷ 2 trường hợp cần test, chưa kể việc tính expected value bằng tay cho 1 tỉ giai thừa....là cviệc 
+cực kì tốn tgian, đôi khi vô nghĩa 
+có cần phải test hết 4 tỷ 2 n hay ko, nếu ko thì cỡ bao nhiêu test case là đủ
+
+=> CẦN CÓ CHIÊU ĐỂ KO TEST HẾT CÁC TEST CASE MÀ VẪN CÓ THỂ KẾT LUẬN DC HÀM OK !
+NGƯỜI TA DÙNG KĨ THUẬT CHIA MIỀN ĐỂ TRỊ, EQUIVALENT PARTITIONING
+					KĨ THUẬT PHÂN VÙNG TƯƠNG ĐƯƠNG
+TA SẼ CHIA TẬP TEST CASE THÀNH NHỮNG TÌNH HUỐNG TƯƠNG ĐỒNG NHAU VỀ ĐẦU VÀO VÀ XỬ LÍ - GỌI LÀ NHỮNG MIỀN
+(PARTITIONING), VÀ TA TEST NHỮNG CASE ĐẠI DIỆN TRONG MIỀN NÀY
+NẾU ĐÚNG, TA DÙNG QUY NẠP KẾT LUẬN CHUNG RẰNG HÀM ĐÚNG, APP ĐÚNG TRONG MIỀN NÀY
+
+VÀ TƯƠNG TỰ CHO NHỮNG MIỀN CÒN LẠI -> GIẢM BỚT SỐ TEST CASE VÀ TEST RUN PHẢI TẠO VÀ THỰC THI
+
+VD: ta chia n thành các miền 
+	n < 0 -> ko tính được giai thừa âm, expected = EXCEPTION, KO HỢP LỆ ĐẦU VÀO -1, -2, -10, ....
+	n = 0, 1, 0! = 1! = 1, miền đặc biệt
+	n = 2,3,4,...,19,20 ->n! trả về kiểu long vừa đủ
+	n = 21,22,23,... giai thừa quá lớn so với kiểu long, vì 20! vừa đủ lưu trữ long(18 số 0)
+			 N quá lớn, return của hàm vượt long -> ném ra ngoại lệ
+
+TỪ 4 TỶ 2 XUỐNG CÒN 15-20 TEST CASES MÀ VẪN DÁM KẾT LUẬN HÀM NGON
+
+
+*NL3: EARLY TESTING - KIỂM THỬ PHẦM MỀM NÊN DC TIẾN HÀNH CÀNG SỚM CÀNG TỐT, ngay cả khi chưa có dòng
+code nào nhưng cviệc kiểm thử đã có thể bắt đầu
+vì việc ngăn ngừa bug thì nên đến từ sớm, vì cái giá phải trả khi sửa code mà sai req. rất lớn, rất tốn kém
+- DÂN QC/TESTER ÊN DC THAM GIA VÀO QUÁ TRÌNH LÀM APP NGAY TỪ GIAI ĐOẠN REQUIREMENT (SWR) VÀ DESIGN
+(giai đoạn này đẻ ra 2 dec quan trọng : SRS và SDD)
+- QC/TESTER LÀ GÃ HIỂU APP HƠN CẢ DEV Ở GÓC ĐỘ XÀI APP, DÙNG APP, HIỂU CÁC MÀN HÌNH CỦA TOÀN BỘ APP CÓ INFO GÌ,
+CÓ XỬ LÍ GÌ , HIỂU VỀ QUY TẮC HOẠT ĐỘNG, NGHIỆP VỤ HOẠT ĐỘNG, KO QUAN TÂM APP PHÍA SAU
+	NẾU DC THAM GIA SỚM VÀO QUÁ TRÌNH LẤY YÊU CẦU, QUÁ TRÌNH DESIGN APP MỚI THÌ RÕ RÀNG KINH NGHIỆM TEST APP
+	XÀI APPTƯƠNG ĐƯƠNG TRƯỚC ĐÓ CỰC KÌ HỮU ÍCH VỚI CÁI APP MỚI NÀY, ĐEM KNGHIỆM XÀI APP TRƯỚC ĐÓ SANG ĐÁNH
+	GIA REQ., UI CUẢ APP ĐANG LÀM, LÀ ĐIỀU NÊN LÀM
+	
+	REQ., DESIGN DC REVIEW, KIỂM TRA, GÓP Ý BỞI QC NGAY TỪ NGÀY ĐẦU -> GIÚP VIỆC LÀM APP SAU NÀY TRÁNH KHỎI 
+THIẾU XÓT VỀ REQ., DESIGN
+	NẾU TESTER DC THAM GIA SỚM , HỌ SẼ NẮM DC BÀI TOÁN CẦN TEST, ĐỦ TGIAN ĐỂ TƯỞNG TƯỢNG CÁC TEST CASE, 
+GIÚP BAO QUÁT DC CÁCH DÙNG CỦA USER
+	=> THAM GIA SỚM, THUẬN LỌI TRONG VIỆC TẠO TEST CASE
+
+*NL4: DEFECTS CLUSTERING - SỰ PHÂN BỐ, PHÂN TÁN, TẬP TRUNG CỦA BUG
+- Bug ko xuất hiện rải đều khắp các tính năng, khắp các màn hình mà có xu hướng tập trung nhiều pử 1 số nơi trong app.
+Có những module có rất nhiều bug, có module ít hơn hẳn
+
+
+-----------------------------------
+NGUYÊN LÍ PATERO - NGUYÊN LÍ 80/20 - GỐC LÀ TỪ NGÀNH KINH TẾ, THỐNG KÊ
+				   - SAU ỨNG DỤNG TRONG KĨ NĂNG MỀM
+- 80% diện tích đất đai trong khu vực rơi vào tay của 20% dân trong khu vực
+  20% người nhưng chiếm 80% tài nguyên
+- 20% khách hàng cá mập, chiếm 80% doanh thu
+
+- THE MORE ... THE MORE ...
+-	ÍT ... NHIỀU
+- đầu ra và vào ko tỉ lệ thuận, 20 đạt dc 80
+	- có những ngày thăng hoa, làm việc hiệu quả, chỉ bỏ ra 20% giờ, đạt dc 80% kế hoạch
+	- ko cần học dàn trải, cố hiểu tốt, hiểu sâu, pro 1 vài môn, đã đạt hầu hết kế hoạch
+hành nghề, đi làm
+	- 20 -> 80: LÀM VIỆC CỰC KÌ TẬP TRUNG, HIỆU QUẢ SẼ ĐẠT DC NHIỀU KẾT QUẢ
+	- 80 -> 20: phí phạm sức lực, thời gian, sức khoẻ
+		    vd: viết code là những giây phút hiếm hoi sau những giờ chơi game 
+-----------------------------------
+
+BUG SẼ TẬP TRUNG Ở 1 SỐ CHỖ NÀO ĐÓ TRONG APP, TA CHỈ CẦN TẬP TRUNG NHIỀU VÀO CHỖ BIẾT LÀ SẼ CÓ NHIỀU BUG
+-> 1 CVIỆC, CHIẾN LƯỢC HIỆU QUẢ
+TẬP TRUNG VÀO TEST 1 CHỖ CÓ NHIỀU BUG, BUG KHÓ , NGHIÊM TRỌNG, ĐÃ LÔI RA DC HẦU HẾT BUG CỦA APP
+
+CHỖ NÀO CÓ NHIỀU BUG:
+- màn hình CRUD (create, retrieve(read), update, delete)user, product, ... mấy khi có bug, mấy khi
+có bug nghiêm trọng, hiếm 
+- khi app chúng ta có chơi với thiết bị bên ngoài, app bên ngoài, system khác, bắt đầu có nhiều bug
+do lúc này app phức tạp hơn ko chỉ nằm gọn trong code của mình kiểm soát, app có kết nối với MoMo, PayPal,....
+giao thức giao tiếp app mình với app người ta thiếu đủ thông tin, timeout do mạng lag, app bên kia tạm chết,...
+-> app mình xử lí ra sao
+- app mình có kết nối, sử dụng các thiết bị: camera, máy in, máy đọc thẻ, sensor, lệ thuộc cấu hình (cam 4k, 
+có quay đêm dc ko), giao thức truyền tín hiệu, tính ổn định của thiết bị, wifi, version của thiết bị
+- khi có kết nối với nhà người ta, thì có khả năng xảy ra kết nối lỗi , lỗi thiết bị, cố gắng phải mô phỏng, phòng ngừa
+
+
+*NL5: PESTICIDE PARADOX - NGHỊCH LÍ THUỐC TRỪ SÂU, HIẸN TƯỢNG KHÁNG THUỐC
+- kháng thuốc: Sử dụng thuốc đúng cho bệnh X nhưng bệnh không hết, sâu bọ ko chết
+	LẼ RA PHẢI CHẾT, NHƯNG LẠI KO
+
+- nhờ dân QC đảm bảo chất lượng phần mềm, nhưng lại để có bug, nhiều bug nghiêm trọng vẫn còn tồn tại, nhờ gác cổng
+nhưng lại lại để nhiều lỗ hổng
+
+- bug luôn còn dù test kĩ cỡ nào (NL1) nhưng ko dc để nhiều bug, bug nghiêm trọng xảy ra
+- TẠI SAO LẠI CÓ NGHỊCH LÍ NÀY, BUG CÒN NHIỀU DÙ ĐÃ TEST
+- KHI QC TEST MÃI , TEST HOÀI 1 CHỨC NĂNG, 1 MODULE, 1 CÁI APP, TEST LẶP ĐI LẶP LẠI, 
+CVIỆC LẶP ĐI LẶP LẠI, SẼ GÂY RA SỰ NHÀM CHÁN, CHỦ QUAN, NGHĨ RẰNG HÔM TRƯỚC ĐÃ TEST VÀ THẤY NÓ ỔN,
+HÔM NAY CHẮC KO CẦN TEST LẠI -> CÓ THỂ CÓ BUG MÀ ĐÃ KO DC PHÁT HIỆN
+
+- DEV viết code -> đóng gói thành file .jar .war .exe ..... ->Qc nhảy vào, test, thấy bug, báo cáo dev fix,
+có fix code thì cần phải test lại cái mới sửa và các chức năng ko sửa nhưng trong cùng menu có lquan
+-> LẶP LẠI CVIỆC ĐÃ TỪNG LÀM: TÍNH NĂNG CRUD, create bị bug, sửa lại, khi test lại thì phải test cả CRUD, 
+chán đến từ đây, đoán rằng chỉ cần test C, ko cần test RUD vì lần trước đã test rồi
+
+Trong cuộc sống, học tập: Làm mãi 1 thứ, làm 1 thứ liên tục trong 1 tgian dài -> sức ì, sức sáng tạo, chủ quan, 
+nhàm chán, ngó lơ, ... là có thật -> BREAK ĐỂ REFRESH VÀ ĐẨY CÁC NƠ-RON ĐỔI TRẠNG THÁI TƯ DUY
+
+TRONG QC, NẾU CÓ CẢM GIÁC NHÀM CHÁN, QC LEADER PHẢI BIẾT NGUYÊN LÍ NÀY ĐỂ ĐỊNH KÌ CHO DÂN QC HOÁN ĐỔI DỰ ÁN,
+HOÁN ĐỔI MODULE,....
+-> GÂY RA SỰ TÒ MÒ, KHÁM PHÁ, LÚC NÀY PHÁT HUY DC CÁC TEST CASE MỚI, DUY TRÌ SỰ TẬP TRUNG CHO CHÍNH QC, 
+CHẤT LƯỢNG KIỂM THỬ TRỞ NÊN TỐT HƠN, THAY VÌ ĐỂ LẠI NHIỀU BUG KO DC TÌM THẤY 
+
+*NL6: TESTING IS CONTEXT DEPENDANT - KIỂM THỬ PHỤ THUỘC VÀO NGỮ CẢNH
+- tuỳ thuộc vào ngữ cảnh, tuỳ câu chuyện,  tuỳ loại app, tuỳ môi trường chạy app thì có cách kiểm thử khác nhau
+- web app kiểm thử sẽ là: chạy tương thích với bao nhiêu browser, có bị bể gì ko (có những tag chỉ hỗ trợ ở 
+browser x version y). web app còn phải quan tâm màn hình nào đang dùng web app. Nếu là PC/Laptop UI chiều ngang, 
+nhưng nếu xài trên đthoại thì dọc hay ngang đều phải ổn => thêm khái niệm : RESPONSIVE WEB
+- mobile app thì tuỳ OS: Android, IOS mà chế độ bảo mật hệ thống khác nhau, cho nên nếu app đa nền, phải test bảo mật
+để đảm bảo tính năng app chạy ổn: đòi truy cập danh bạ, thư mục media/thẻ nhớ.... và những setting của app
+- nếu test Infomation System (môn SWP) hầu hết là màn hình + CRUD + thuật toán phía sau thì KHÁC TEST APP IoT
+	SWP test tương đối nhẹ: do browser và server
+	IoT: app + device: cấu hình , wifi, độ trễ tín hiệu, ổn định thiết bị
+
+*NL7: ABSENCE OF ERROR FALLACY - ATSM - ẢO TƯỞNG RẰNG APP KO CÓ BUG LÀ APP NGON
+- "APP CỰC NGON VÌ KO CÓ BUG/ÍT BUG"
+  CÂU NÀY HOÀN TOÀN SAI, RẤT RẤT SAI
+ko đúng vì: app luôn có bug.
+	    việc làm sản phẩm trong csống, làm 1 cái app trong việc làm pmềm thì yếu tố về chất lượng là default,
+	    mặc định là sản phẩm phải có chất lượng
+- VẬY CÁI GÌ MỚI LÀ ĐÚNG, VÌ CHẤT LƯỢNG, ÍT BUG LÀ DEFAULT
+TA SẼ GÁY RẰNG: APP CTY CHÚNG TÔI CÓ 1 CỘNG ĐỒNG USER ĐÔNG ĐẢO
+		RẤT NHIỀU USER ĐANG DÙNG APP CHÚNG TÔI
+		APP DC USER TIN DÙNG, DC USER DÙNG TRONG CÔNG VIỆC CỦA HỌ
+		APP DC CỘNG ĐỒNG TIN DÙNG, SUGGEST CHO NHAU, [APP CÓ CRACK]
+
+=> ĐO SỰ THÀNH CÔNG CỦA APP = CỘNG ĐỒNG USER
+VD: 
+- Yahoo: 360 MXH
+- FB : FB
+- Google: Google+ :fail(ko đủ user)
+- VCcorp: LotusMXH:fail(ko đủ user)
+
+=============================================================================
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
